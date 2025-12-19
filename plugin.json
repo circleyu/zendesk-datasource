@@ -1,0 +1,36 @@
+{
+  "type": "datasource",
+  "name": "Zendesk",
+  "id": "grafana-zendesk-datasource",
+  "metrics": true,
+  "annotations": true,
+  "info": {
+    "description": "Zendesk datasource for Grafana",
+    "author": {
+      "name": ""
+    },
+    "keywords": ["zendesk", "ticketing", "datasource"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/grafana/zendesk-datasource"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/zendesk-datasource/blob/main/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "0.1.0",
+    "updated": "2024-01-01"
+  },
+  "dependencies": {
+    "grafanaVersion": "11.0.0",
+    "plugins": []
+  }
+}
+
