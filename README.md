@@ -158,7 +158,7 @@ npm test
 
 ## License
 
-Apache-2.0
+MIT License - see [LICENSE](LICENSE) file for details
 
 ## Support
 

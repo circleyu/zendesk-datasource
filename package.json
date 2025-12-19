@@ -9,7 +9,7 @@
     "watch": "grafana-toolkit plugin:dev --watch"
   },
   "author": "",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "devDependencies": {
     "@grafana/data": "^11.0.0",
     "@grafana/runtime": "^11.0.0",
