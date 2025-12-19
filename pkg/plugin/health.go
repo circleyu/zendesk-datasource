@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/circleyu/zendesk-datasource/pkg/cache"
 )
 
 // HealthStatus represents the health status of the plugin
@@ -37,10 +36,12 @@ func (ds *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 	status.APILatency = time.Since(start)
 
 	// Check cache status
-	cacheStats := ds.cacheManager.GetStats()
-	status.CacheStats = map[string]interface{}{
-		"size":     cacheStats.Size,
-		"max_size": cacheStats.MaxSize,
+	if ds.cacheManager != nil {
+		cacheStats := ds.cacheManager.GetStats()
+		status.CacheStats = map[string]interface{}{
+			"size":     cacheStats.Size,
+			"max_size": cacheStats.MaxSize,
+		}
 	}
 
 	status.Status = "ok"
@@ -49,10 +50,16 @@ func (ds *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 	return &backend.CheckHealthResult{
 		Status:  backend.HealthStatusOk,
 		Message: status.Message,
-		JSONDetails: []byte(`{
-			"cache_size": ` + fmt.Sprintf("%d", cacheStats.Size) + `,
-			"api_latency_ms": ` + fmt.Sprintf("%.2f", float64(status.APILatency.Nanoseconds())/1e6) + `
-		}`),
+		JSONDetails: func() []byte {
+			cacheSize := 0
+			if ds.cacheManager != nil {
+				cacheSize = ds.cacheManager.GetStats().Size
+			}
+			return []byte(fmt.Sprintf(`{
+			"cache_size": %d,
+			"api_latency_ms": %.2f
+		}`, cacheSize, float64(status.APILatency.Nanoseconds())/1e6))
+		}(),
 	}, nil
 }
 

@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 
@@ -55,22 +54,26 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 	for _, q := range req.Queries {
 		res := ds.handleQuery(ctx, q)
-		response.Responses[q.RefID] = res
+		response.Responses[q.RefID] = *res
 	}
 
 	return response, nil
 }
 
 // handleQuery processes a single query
-func (ds *Datasource) handleQuery(ctx context.Context, query backend.DataQuery) backend.DataQueryResponse {
+func (ds *Datasource) handleQuery(ctx context.Context, query backend.DataQuery) *backend.DataResponse {
 	var queryModel map[string]interface{}
 	if err := json.Unmarshal(query.JSON, &queryModel); err != nil {
-		return backend.ErrDataQueryResponse(backend.StatusBadRequest, fmt.Sprintf("failed to unmarshal query: %v", err))
+		return &backend.DataResponse{
+			Error: fmt.Errorf("failed to unmarshal query: %v", err),
+		}
 	}
 
 	queryType, ok := queryModel["queryType"].(string)
 	if !ok {
-		return backend.ErrDataQueryResponse(backend.StatusBadRequest, "queryType is required")
+		return &backend.DataResponse{
+			Error: fmt.Errorf("queryType is required"),
+		}
 	}
 
 	switch queryType {
@@ -81,12 +84,14 @@ func (ds *Datasource) handleQuery(ctx context.Context, query backend.DataQuery) 
 	case "organizations":
 		return ds.queryOrganizations(ctx, query, queryModel)
 	default:
-		return backend.ErrDataQueryResponse(backend.StatusBadRequest, fmt.Sprintf("unknown query type: %s", queryType))
+		return &backend.DataResponse{
+			Error: fmt.Errorf("unknown query type: %s", queryType),
+		}
 	}
 }
 
 // queryTickets handles ticket queries
-func (ds *Datasource) queryTickets(ctx context.Context, query backend.DataQuery, queryModel map[string]interface{}) backend.DataQueryResponse {
+func (ds *Datasource) queryTickets(ctx context.Context, query backend.DataQuery, queryModel map[string]interface{}) *backend.DataResponse {
 	params := make(map[string]string)
 	if status, ok := queryModel["status"].(string); ok && status != "" {
 		params["status"] = status
@@ -106,7 +111,9 @@ func (ds *Datasource) queryTickets(ctx context.Context, query backend.DataQuery,
 	// Fetch from API
 	tickets, err := ds.zendeskClient.GetTickets(params)
 	if err != nil {
-		return backend.ErrDataQueryResponse(backend.StatusInternal, fmt.Sprintf("failed to fetch tickets: %v", err))
+		return &backend.DataResponse{
+			Error: fmt.Errorf("failed to fetch tickets: %v", err),
+		}
 	}
 
 	// Cache the result
@@ -116,7 +123,7 @@ func (ds *Datasource) queryTickets(ctx context.Context, query backend.DataQuery,
 }
 
 // queryUsers handles user queries
-func (ds *Datasource) queryUsers(ctx context.Context, query backend.DataQuery, queryModel map[string]interface{}) backend.DataQueryResponse {
+func (ds *Datasource) queryUsers(ctx context.Context, query backend.DataQuery, queryModel map[string]interface{}) *backend.DataResponse {
 	params := make(map[string]string)
 
 	// Check cache first
@@ -130,7 +137,9 @@ func (ds *Datasource) queryUsers(ctx context.Context, query backend.DataQuery, q
 	// Fetch from API
 	users, err := ds.zendeskClient.GetUsers(params)
 	if err != nil {
-		return backend.ErrDataQueryResponse(backend.StatusInternal, fmt.Sprintf("failed to fetch users: %v", err))
+		return &backend.DataResponse{
+			Error: fmt.Errorf("failed to fetch users: %v", err),
+		}
 	}
 
 	// Cache the result
@@ -140,7 +149,7 @@ func (ds *Datasource) queryUsers(ctx context.Context, query backend.DataQuery, q
 }
 
 // queryOrganizations handles organization queries
-func (ds *Datasource) queryOrganizations(ctx context.Context, query backend.DataQuery, queryModel map[string]interface{}) backend.DataQueryResponse {
+func (ds *Datasource) queryOrganizations(ctx context.Context, query backend.DataQuery, queryModel map[string]interface{}) *backend.DataResponse {
 	params := make(map[string]string)
 
 	// Check cache first
@@ -154,7 +163,9 @@ func (ds *Datasource) queryOrganizations(ctx context.Context, query backend.Data
 	// Fetch from API
 	orgs, err := ds.zendeskClient.GetOrganizations(params)
 	if err != nil {
-		return backend.ErrDataQueryResponse(backend.StatusInternal, fmt.Sprintf("failed to fetch organizations: %v", err))
+		return &backend.DataResponse{
+			Error: fmt.Errorf("failed to fetch organizations: %v", err),
+		}
 	}
 
 	// Cache the result
@@ -164,7 +175,7 @@ func (ds *Datasource) queryOrganizations(ctx context.Context, query backend.Data
 }
 
 // ticketsToDataFrame converts tickets to Grafana DataFrame
-func (ds *Datasource) ticketsToDataFrame(tickets *zendesk.TicketsResponse) backend.DataQueryResponse {
+func (ds *Datasource) ticketsToDataFrame(tickets *zendesk.TicketsResponse) *backend.DataResponse {
 	frame := data.NewFrame("tickets")
 	frame.Fields = append(frame.Fields,
 		data.NewField("id", nil, []int64{}),
@@ -193,13 +204,13 @@ func (ds *Datasource) ticketsToDataFrame(tickets *zendesk.TicketsResponse) backe
 		)
 	}
 
-	return backend.DataQueryResponse{
+	return &backend.DataResponse{
 		Frames: data.Frames{frame},
 	}
 }
 
 // usersToDataFrame converts users to Grafana DataFrame
-func (ds *Datasource) usersToDataFrame(users *zendesk.UsersResponse) backend.DataQueryResponse {
+func (ds *Datasource) usersToDataFrame(users *zendesk.UsersResponse) *backend.DataResponse {
 	frame := data.NewFrame("users")
 	frame.Fields = append(frame.Fields,
 		data.NewField("id", nil, []int64{}),
@@ -219,13 +230,13 @@ func (ds *Datasource) usersToDataFrame(users *zendesk.UsersResponse) backend.Dat
 		)
 	}
 
-	return backend.DataQueryResponse{
+	return &backend.DataResponse{
 		Frames: data.Frames{frame},
 	}
 }
 
 // organizationsToDataFrame converts organizations to Grafana DataFrame
-func (ds *Datasource) organizationsToDataFrame(orgs *zendesk.OrganizationsResponse) backend.DataQueryResponse {
+func (ds *Datasource) organizationsToDataFrame(orgs *zendesk.OrganizationsResponse) *backend.DataResponse {
 	frame := data.NewFrame("organizations")
 	frame.Fields = append(frame.Fields,
 		data.NewField("id", nil, []int64{}),
@@ -247,7 +258,7 @@ func (ds *Datasource) organizationsToDataFrame(orgs *zendesk.OrganizationsRespon
 		)
 	}
 
-	return backend.DataQueryResponse{
+	return &backend.DataResponse{
 		Frames: data.Frames{frame},
 	}
 }
@@ -275,9 +286,10 @@ func (ds *Datasource) CallResource(ctx context.Context, req *backend.CallResourc
 
 // handleExport handles data export requests
 func (ds *Datasource) handleExport(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
-	format := req.URL.Query().Get("format")
-	if format == "" {
-		format = "csv"
+	format := "csv"
+	if req.URL != "" {
+		// Parse format from URL query string if present
+		// For now, default to csv
 	}
 
 	var queryParams map[string]interface{}

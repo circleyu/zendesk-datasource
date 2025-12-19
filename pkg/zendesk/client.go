@@ -1,7 +1,6 @@
 package zendesk
 
 import (
-	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -59,7 +58,7 @@ func (c *Client) request(method, endpoint string, body io.Reader) (*http.Respons
 		if err := json.NewDecoder(resp.Body).Decode(&errorResp); err == nil {
 			return nil, fmt.Errorf("API error: %s", errorResp.Error)
 		}
-		return nil, fmt.Errorf("HTTP error: %d %s", resp.StatusCode, resp.StatusText)
+		return nil, fmt.Errorf("HTTP error: %d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 	}
 
 	return resp, nil

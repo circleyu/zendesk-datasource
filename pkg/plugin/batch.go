@@ -2,9 +2,8 @@ package plugin
 
 import (
 	"context"
+	"fmt"
 	"sync"
-
-	"github.com/circleyu/zendesk-datasource/pkg/zendesk"
 )
 
 // BatchQueryRequest represents a batch query request

@@ -20,4 +20,4 @@ coverage/
 go.work
 vendor/
 go.sum
-
+main

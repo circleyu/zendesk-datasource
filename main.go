@@ -3,9 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 
 	"github.com/circleyu/zendesk-datasource/pkg/plugin"
