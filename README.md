@@ -16,7 +16,7 @@ Grafana datasource plugin for querying and visualizing data from Zendesk.
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/your-org/zendesk-datasource.git
+git clone https://github.com/circleyu/zendesk-datasource.git
 cd zendesk-datasource
 ```
 
@@ -162,7 +162,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## Support
 
-For issues and feature requests, please visit the [GitHub repository](https://github.com/your-org/zendesk-datasource).
+For issues and feature requests, please visit the [GitHub repository](https://github.com/circleyu/zendesk-datasource).
 
 ## Changelog
 
