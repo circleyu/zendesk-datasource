@@ -6,6 +6,12 @@ import {
   ZendeskTicketResponse,
   ZendeskSearchResponse,
   ZendeskErrorResponse,
+  ZendeskUser,
+  ZendeskUsersResponse,
+  ZendeskUserResponse,
+  ZendeskOrganization,
+  ZendeskOrganizationsResponse,
+  ZendeskOrganizationResponse,
   TicketStatus,
   TicketPriority,
 } from '../types';
@@ -174,6 +180,132 @@ export class ZendeskClient {
 
     const endpoint = `/search.json?${queryParams.toString()}`;
     return this.request<ZendeskSearchResponse>(endpoint);
+  }
+
+  /**
+   * 獲取用戶列表
+   */
+  async getUsers(params?: {
+    role?: 'end-user' | 'agent' | 'admin';
+    page?: number;
+    per_page?: number;
+    sort_by?: string;
+    sort_order?: 'asc' | 'desc';
+  }): Promise<ZendeskUsersResponse> {
+    const queryParams = new URLSearchParams();
+    
+    if (params?.role) {
+      queryParams.append('role', params.role);
+    }
+    if (params?.page) {
+      queryParams.append('page', params.page.toString());
+    }
+    if (params?.per_page) {
+      queryParams.append('per_page', params.per_page.toString());
+    }
+    if (params?.sort_by) {
+      queryParams.append('sort_by', params.sort_by);
+    }
+    if (params?.sort_order) {
+      queryParams.append('sort_order', params.sort_order);
+    }
+
+    const queryString = queryParams.toString();
+    const endpoint = `/users.json${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request<ZendeskUsersResponse>(endpoint);
+  }
+
+  /**
+   * 根據 ID 獲取單個用戶
+   */
+  async getUserById(id: number): Promise<ZendeskUserResponse> {
+    return this.request<ZendeskUserResponse>(`/users/${id}.json`);
+  }
+
+  /**
+   * 搜索用戶
+   */
+  async searchUsers(query: string, params?: {
+    page?: number;
+    per_page?: number;
+  }): Promise<ZendeskUsersResponse> {
+    const queryParams = new URLSearchParams();
+    queryParams.append('query', query);
+    
+    if (params?.page) {
+      queryParams.append('page', params.page.toString());
+    }
+    if (params?.per_page) {
+      queryParams.append('per_page', params.per_page.toString());
+    }
+
+    const endpoint = `/users/search.json?${queryParams.toString()}`;
+    return this.request<ZendeskUsersResponse>(endpoint);
+  }
+
+  /**
+   * 獲取組織列表
+   */
+  async getOrganizations(params?: {
+    page?: number;
+    per_page?: number;
+    sort_by?: string;
+    sort_order?: 'asc' | 'desc';
+  }): Promise<ZendeskOrganizationsResponse> {
+    const queryParams = new URLSearchParams();
+    
+    if (params?.page) {
+      queryParams.append('page', params.page.toString());
+    }
+    if (params?.per_page) {
+      queryParams.append('per_page', params.per_page.toString());
+    }
+    if (params?.sort_by) {
+      queryParams.append('sort_by', params.sort_by);
+    }
+    if (params?.sort_order) {
+      queryParams.append('sort_order', params.sort_order);
+    }
+
+    const queryString = queryParams.toString();
+    const endpoint = `/organizations.json${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request<ZendeskOrganizationsResponse>(endpoint);
+  }
+
+  /**
+   * 根據 ID 獲取單個組織
+   */
+  async getOrganizationById(id: number): Promise<ZendeskOrganizationResponse> {
+    return this.request<ZendeskOrganizationResponse>(`/organizations/${id}.json`);
+  }
+
+  /**
+   * 獲取組織的工單
+   */
+  async getOrganizationTickets(orgId: number, params?: {
+    status?: TicketStatus;
+    page?: number;
+    per_page?: number;
+  }): Promise<ZendeskTicketsResponse> {
+    const queryParams = new URLSearchParams();
+    queryParams.append('organization_id', orgId.toString());
+    
+    if (params?.status) {
+      queryParams.append('status', params.status);
+    }
+    if (params?.page) {
+      queryParams.append('page', params.page.toString());
+    }
+    if (params?.per_page) {
+      queryParams.append('per_page', params.per_page.toString());
+    }
+
+    const queryString = queryParams.toString();
+    const endpoint = `/tickets.json?${queryString}`;
+    
+    return this.request<ZendeskTicketsResponse>(endpoint);
   }
 
   /**

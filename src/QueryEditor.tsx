@@ -10,6 +10,10 @@ const queryTypeOptions: Array<SelectableValue<QueryType>> = [
   { label: 'Search', value: QueryType.Search },
   { label: 'Ticket by ID', value: QueryType.TicketById },
   { label: 'Stats', value: QueryType.Stats },
+  { label: 'Users', value: QueryType.Users },
+  { label: 'Organizations', value: QueryType.Organizations },
+  { label: 'User Stats', value: QueryType.UserStats },
+  { label: 'Organization Stats', value: QueryType.OrgStats },
 ];
 
 const statusOptions: Array<SelectableValue<TicketStatus>> = [
@@ -147,6 +151,42 @@ export const QueryEditor: React.FC<Props> = ({ query, onChange, onRunQuery }) =>
         </InlineFieldRow>
       )}
 
+      {localQuery.queryType === QueryType.Users && (
+        <InlineFieldRow>
+          <InlineField label="User ID" labelWidth={14} grow>
+            <Input
+              type="number"
+              value={localQuery.userId || ''}
+              onChange={(e) => {
+                const userId = parseInt(e.target.value, 10);
+                updateQuery({ userId: isNaN(userId) ? undefined : userId });
+              }}
+              onBlur={onRunQuery}
+              placeholder="Filter by user ID (optional)"
+              width={30}
+            />
+          </InlineField>
+        </InlineFieldRow>
+      )}
+
+      {localQuery.queryType === QueryType.Organizations && (
+        <InlineFieldRow>
+          <InlineField label="Organization ID" labelWidth={14} grow>
+            <Input
+              type="number"
+              value={localQuery.organizationId || ''}
+              onChange={(e) => {
+                const orgId = parseInt(e.target.value, 10);
+                updateQuery({ organizationId: isNaN(orgId) ? undefined : orgId });
+              }}
+              onBlur={onRunQuery}
+              placeholder="Filter by organization ID (optional)"
+              width={30}
+            />
+          </InlineField>
+        </InlineFieldRow>
+      )}
+
       {localQuery.queryType === QueryType.Search && (
         <InlineFieldRow>
           <InlineField label="Search Query" labelWidth={14} grow>
@@ -161,7 +201,10 @@ export const QueryEditor: React.FC<Props> = ({ query, onChange, onRunQuery }) =>
         </InlineFieldRow>
       )}
 
-      {(localQuery.queryType === QueryType.Tickets || localQuery.queryType === QueryType.Stats) && (
+      {(localQuery.queryType === QueryType.Tickets ||
+        localQuery.queryType === QueryType.Stats ||
+        localQuery.queryType === QueryType.Users ||
+        localQuery.queryType === QueryType.Organizations) && (
         <>
           <InlineFieldRow>
             <InlineField label="Status" labelWidth={14} grow>

@@ -23,6 +23,11 @@ import {
   transformTicketsToTimeSeries,
   calculateTicketStats,
   transformStatsToDataFrame,
+  transformUsersAPIResponse,
+  transformUsersToTimeSeries,
+  calculateUserStats,
+  transformOrganizationsAPIResponse,
+  calculateOrganizationStats,
 } from './utils/dataTransform';
 
 export class DataSource extends DataSourceApi<ZendeskQuery, ZendeskConfig> {
@@ -99,6 +104,18 @@ export class DataSource extends DataSourceApi<ZendeskQuery, ZendeskConfig> {
 
         case QueryType.Stats:
           return await this.queryStats(query, timeRange);
+
+        case QueryType.Users:
+          return await this.queryUsers(query, timeRange);
+
+        case QueryType.Organizations:
+          return await this.queryOrganizations(query, timeRange);
+
+        case QueryType.UserStats:
+          return await this.queryUserStats(query, timeRange);
+
+        case QueryType.OrgStats:
+          return await this.queryOrgStats(query, timeRange);
 
         default:
           throw new Error(`Unknown query type: ${query.queryType}`);
@@ -239,6 +256,119 @@ export class DataSource extends DataSourceApi<ZendeskQuery, ZendeskConfig> {
         message: error instanceof Error ? error.message : 'Unknown error occurred',
       };
     }
+  }
+
+  /**
+   * 查詢用戶列表
+   */
+  private async queryUsers(
+    query: ZendeskQuery,
+    timeRange?: { from: string; to: string }
+  ): Promise<MutableDataFrame[]> {
+    const params: any = {
+      page: query.page || 1,
+      per_page: query.limit || 25,
+    };
+
+    if (query.userId) {
+      const response = await this.client.getUserById(query.userId);
+      const dataFrame = transformUsersAPIResponse({ users: [response.user] });
+      return [dataFrame as MutableDataFrame];
+    }
+
+    const response = await this.client.getUsers(params);
+    const dataFrame = transformUsersAPIResponse(response);
+
+    if (query.format === 'time_series') {
+      const timeSeriesFrames = transformUsersToTimeSeries(response.users, 'day');
+      return timeSeriesFrames;
+    }
+
+    return [dataFrame as MutableDataFrame];
+  }
+
+  /**
+   * 查詢組織列表
+   */
+  private async queryOrganizations(
+    query: ZendeskQuery,
+    timeRange?: { from: string; to: string }
+  ): Promise<MutableDataFrame[]> {
+    const params: any = {
+      page: query.page || 1,
+      per_page: query.limit || 25,
+    };
+
+    if (query.organizationId) {
+      const response = await this.client.getOrganizationById(query.organizationId);
+      const dataFrame = transformOrganizationsAPIResponse({
+        organizations: [response.organization],
+      });
+      return [dataFrame as MutableDataFrame];
+    }
+
+    const response = await this.client.getOrganizations(params);
+    const dataFrame = transformOrganizationsAPIResponse(response);
+
+    return [dataFrame as MutableDataFrame];
+  }
+
+  /**
+   * 查詢用戶統計信息
+   */
+  private async queryUserStats(
+    query: ZendeskQuery,
+    timeRange?: { from: string; to: string }
+  ): Promise<MutableDataFrame[]> {
+    const params: any = {
+      page: 1,
+      per_page: query.limit || 100,
+    };
+
+    const response = await this.client.getUsers(params);
+    const stats = calculateUserStats(response.users);
+    const statsFrame = new MutableDataFrame({
+      fields: [
+        { name: 'Metric', type: FieldType.string },
+        { name: 'Value', type: FieldType.number },
+      ],
+    });
+
+    statsFrame.appendRow(['Total Users', stats.total]);
+    statsFrame.appendRow(['Active Users', stats.active]);
+
+    for (const [role, count] of Object.entries(stats.byRole)) {
+      statsFrame.appendRow([`Role: ${role}`, count]);
+    }
+
+    return [statsFrame];
+  }
+
+  /**
+   * 查詢組織統計信息
+   */
+  private async queryOrgStats(
+    query: ZendeskQuery,
+    timeRange?: { from: string; to: string }
+  ): Promise<MutableDataFrame[]> {
+    const params: any = {
+      page: 1,
+      per_page: query.limit || 100,
+    };
+
+    const response = await this.client.getOrganizations(params);
+    const stats = calculateOrganizationStats(response.organizations);
+    const statsFrame = new MutableDataFrame({
+      fields: [
+        { name: 'Metric', type: FieldType.string },
+        { name: 'Value', type: FieldType.number },
+      ],
+    });
+
+    statsFrame.appendRow(['Total Organizations', stats.total]);
+    statsFrame.appendRow(['With Shared Tickets', stats.withSharedTickets]);
+
+    return [statsFrame];
   }
 
   /**
