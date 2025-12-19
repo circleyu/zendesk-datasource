@@ -1,0 +1,55 @@
+{
+  "common": {
+    "save": "儲存",
+    "cancel": "取消",
+    "test": "測試",
+    "loading": "載入中...",
+    "error": "錯誤",
+    "success": "成功"
+  },
+  "config": {
+    "title": "Zendesk 資料來源設定",
+    "subdomain": "子網域",
+    "subdomainPlaceholder": "your-subdomain",
+    "subdomainHelp": "您的 Zendesk 子網域（例如：'yourcompany' 對應 yourcompany.zendesk.com）",
+    "email": "電子郵件",
+    "emailPlaceholder": "user@example.com",
+    "emailHelp": "您的 Zendesk 帳戶電子郵件",
+    "apiToken": "API 令牌",
+    "apiTokenHelp": "您的 Zendesk API 令牌。您可以在 Zendesk 帳戶設定中產生一個。",
+    "testConnection": "測試連線",
+    "connectionSuccess": "連線成功！",
+    "connectionFailed": "連線失敗。請檢查您的憑證。"
+  },
+  "query": {
+    "title": "查詢編輯器",
+    "queryType": "查詢類型",
+    "tickets": "工單",
+    "search": "搜尋",
+    "ticketById": "依 ID 查詢工單",
+    "stats": "統計",
+    "users": "使用者",
+    "organizations": "組織",
+    "userStats": "使用者統計",
+    "orgStats": "組織統計",
+    "status": "狀態",
+    "priority": "優先級",
+    "limit": "限制",
+    "page": "頁面",
+    "format": "格式",
+    "table": "表格",
+    "timeSeries": "時間序列",
+    "searchQuery": "搜尋查詢",
+    "ticketId": "工單 ID",
+    "userId": "使用者 ID",
+    "organizationId": "組織 ID"
+  },
+  "errors": {
+    "noQueryType": "未指定查詢類型",
+    "invalidQuery": "無效的查詢",
+    "apiError": "發生 API 錯誤",
+    "connectionError": "連線錯誤",
+    "unknownError": "發生未知錯誤"
+  }
+}
+

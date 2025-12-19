@@ -1,0 +1,55 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "test": "测试",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功"
+  },
+  "config": {
+    "title": "Zendesk 数据源配置",
+    "subdomain": "子域名",
+    "subdomainPlaceholder": "your-subdomain",
+    "subdomainHelp": "您的 Zendesk 子域名（例如：'yourcompany' 对应 yourcompany.zendesk.com）",
+    "email": "电子邮件",
+    "emailPlaceholder": "user@example.com",
+    "emailHelp": "您的 Zendesk 账户电子邮件",
+    "apiToken": "API 令牌",
+    "apiTokenHelp": "您的 Zendesk API 令牌。您可以在 Zendesk 账户设置中生成一个。",
+    "testConnection": "测试连接",
+    "connectionSuccess": "连接成功！",
+    "connectionFailed": "连接失败。请检查您的凭据。"
+  },
+  "query": {
+    "title": "查询编辑器",
+    "queryType": "查询类型",
+    "tickets": "工单",
+    "search": "搜索",
+    "ticketById": "按 ID 查询工单",
+    "stats": "统计",
+    "users": "用户",
+    "organizations": "组织",
+    "userStats": "用户统计",
+    "orgStats": "组织统计",
+    "status": "状态",
+    "priority": "优先级",
+    "limit": "限制",
+    "page": "页面",
+    "format": "格式",
+    "table": "表格",
+    "timeSeries": "时间序列",
+    "searchQuery": "搜索查询",
+    "ticketId": "工单 ID",
+    "userId": "用户 ID",
+    "organizationId": "组织 ID"
+  },
+  "errors": {
+    "noQueryType": "未指定查询类型",
+    "invalidQuery": "无效的查询",
+    "apiError": "发生 API 错误",
+    "connectionError": "连接错误",
+    "unknownError": "发生未知错误"
+  }
+}
+

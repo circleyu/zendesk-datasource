@@ -1,0 +1,55 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "test": "Test",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "config": {
+    "title": "Zendesk Data Source Configuration",
+    "subdomain": "Subdomain",
+    "subdomainPlaceholder": "your-subdomain",
+    "subdomainHelp": "Your Zendesk subdomain (e.g., 'yourcompany' for yourcompany.zendesk.com)",
+    "email": "Email",
+    "emailPlaceholder": "user@example.com",
+    "emailHelp": "Your Zendesk account email",
+    "apiToken": "API Token",
+    "apiTokenHelp": "Your Zendesk API token. You can generate one in your Zendesk account settings.",
+    "testConnection": "Test Connection",
+    "connectionSuccess": "Connection successful!",
+    "connectionFailed": "Connection failed. Please check your credentials."
+  },
+  "query": {
+    "title": "Query Editor",
+    "queryType": "Query Type",
+    "tickets": "Tickets",
+    "search": "Search",
+    "ticketById": "Ticket by ID",
+    "stats": "Statistics",
+    "users": "Users",
+    "organizations": "Organizations",
+    "userStats": "User Statistics",
+    "orgStats": "Organization Statistics",
+    "status": "Status",
+    "priority": "Priority",
+    "limit": "Limit",
+    "page": "Page",
+    "format": "Format",
+    "table": "Table",
+    "timeSeries": "Time Series",
+    "searchQuery": "Search Query",
+    "ticketId": "Ticket ID",
+    "userId": "User ID",
+    "organizationId": "Organization ID"
+  },
+  "errors": {
+    "noQueryType": "No query type specified",
+    "invalidQuery": "Invalid query",
+    "apiError": "API error occurred",
+    "connectionError": "Connection error",
+    "unknownError": "Unknown error occurred"
+  }
+}
+

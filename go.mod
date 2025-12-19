@@ -6,6 +6,7 @@ require (
 	github.com/grafana/grafana-plugin-sdk-go v0.194.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/gorilla/websocket v1.5.1
+	github.com/stretchr/testify v1.8.4
 )
 
 require (
