@@ -1,14 +1,24 @@
-# Grafana Zendesk Datasource Plugin
+# Grafana Zendesk Data Source Plugin
 
-Grafana datasource plugin for querying and visualizing data from Zendesk.
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/grafana/zendesk-datasource)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+A Grafana data source plugin for integrating Zendesk ticket data, user information, and organizational metrics into your Grafana dashboards.
 
 ## Features
 
-- **Ticket Queries**: Query tickets by status, priority, assignee, and more
-- **Search**: Full-text search across Zendesk tickets
-- **Statistics**: Get ticket statistics and metrics
-- **Time Series**: Visualize ticket trends over time
-- **Table View**: Display tickets in a table format
+- ✅ **Multiple Query Types**: Tickets, Users, Organizations, Statistics
+- ✅ **Advanced Filtering**: Status, Priority, Date ranges, Custom filters
+- ✅ **Time Series Support**: Convert data to time series for trend analysis
+- ✅ **Query Templates**: Pre-built templates for common use cases
+- ✅ **Query History**: Save and reuse previous queries
+- ✅ **Backend Plugin**: Go-based backend for improved performance
+- ✅ **Caching**: Server-side caching with LRU and TTL strategies
+- ✅ **Batch Operations**: Execute multiple queries in parallel
+- ✅ **Data Export**: Export data in CSV and JSON formats
+- ✅ **Advanced Visualizations**: Heatmap, Gantt chart, Relationship graph
+- ✅ **Internationalization**: Support for English, Traditional Chinese, Simplified Chinese
+- ✅ **Health Monitoring**: Built-in health check endpoint
 
 ## Installation
 
@@ -160,16 +170,18 @@ npm test
 
 MIT License - see [LICENSE](LICENSE) file for details
 
+## Documentation
+
+- [User Guide](docs/user-guide/README.md) - Complete user documentation
+- [API Documentation](docs/api/README.md) - Backend API reference
+- [Developer Guide](docs/developer-guide/README.md) - Development setup and guidelines
+- [Troubleshooting](docs/troubleshooting/README.md) - Common issues and solutions
+
+## Version History
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
 ## Support
 
 For issues and feature requests, please visit the [GitHub repository](https://github.com/circleyu/zendesk-datasource).
-
-## Changelog
-
-### 0.1.0 (Initial Release)
-- Basic ticket querying
-- Search functionality
-- Statistics
-- Time series visualization
-- Table view
 
