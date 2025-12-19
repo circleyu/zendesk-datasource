@@ -7,7 +7,8 @@
   "info": {
     "description": "Zendesk datasource for Grafana",
     "author": {
-      "name": ""
+      "name": "Circle Yu",
+      "url": "https://github.com/circleyu"
     },
     "keywords": ["zendesk", "ticketing", "datasource"],
     "logos": {
@@ -17,11 +18,11 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/grafana/zendesk-datasource"
+        "url": "https://github.com/circleyu/zendesk-datasource"
       },
       {
         "name": "License",
-        "url": "https://github.com/grafana/zendesk-datasource/blob/master/LICENSE"
+        "url": "https://github.com/circleyu/zendesk-datasource/blob/master/LICENSE"
       }
     ],
     "screenshots": [],
