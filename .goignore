@@ -1,14 +1,3 @@
-node_modules/
-dist/
-coverage/
-*.log
-.DS_Store
-.env
-.env.local
-*.swp
-*.swo
-*~
-
 # Go build artifacts
 *.exe
 *.exe~
@@ -18,6 +7,16 @@ coverage/
 *.test
 *.out
 go.work
+
+# Go vendor
 vendor/
+
+# Go modules
 go.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
 
